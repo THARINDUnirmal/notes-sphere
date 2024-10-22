@@ -42,6 +42,13 @@ class _NotesScreenState extends State<NotesScreen> {
         ),
       ),
       floatingActionButton: FloatingActionButton(
+        shape: RoundedRectangleBorder(
+          borderRadius: BorderRadius.circular(100),
+          side: const BorderSide(
+            width: 2,
+            color: AppColor.kWhiteColor,
+          ),
+        ),
         onPressed: () {},
         child: const Icon(
           Icons.add,
