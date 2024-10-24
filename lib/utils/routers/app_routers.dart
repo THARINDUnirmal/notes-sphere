@@ -1,5 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:go_router/go_router.dart';
+import 'package:notes_sphere/screens/all_notes_list_screen.dart';
 import 'package:notes_sphere/screens/home_screen.dart';
 import 'package:notes_sphere/screens/notes_screen.dart';
 
@@ -16,10 +17,18 @@ class AppRouters {
           return const HomeScreen();
         },
       ),
+
       GoRoute(
         path: "/Notes",
         builder: (context, state) {
           return const NotesScreen();
+        },
+      ),
+      GoRoute(
+        path: "/noteByCategeory",
+        builder: (context, state) {
+          final String catergeory = state.extra as String;
+          return AllNotesListScreen(category: catergeory);
         },
       )
     ],

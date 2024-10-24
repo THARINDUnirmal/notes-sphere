@@ -5,6 +5,7 @@ import 'package:notes_sphere/utils/app_constants.dart';
 import 'package:notes_sphere/utils/app_text_styles.dart';
 import 'package:notes_sphere/utils/colors.dart';
 import 'package:notes_sphere/utils/routers/app_routers.dart';
+import 'package:notes_sphere/widgets/notes_card.dart';
 
 class NotesScreen extends StatefulWidget {
   const NotesScreen({super.key});
@@ -71,11 +72,53 @@ class _NotesScreenState extends State<NotesScreen> {
           AppConstants.kDefaultPdding,
         ),
         child: Column(
+          crossAxisAlignment: CrossAxisAlignment.start,
           children: [
             Text(
               "Notes",
-              style: AppTextStyles.appTitle,
+              style: AppTextStyles.appTitle.copyWith(
+                fontSize: 32,
+              ),
             ),
+            const SizedBox(
+              height: 30,
+            ),
+            allNoteList.isEmpty
+                ? SizedBox(
+                    height: MediaQuery.of(context).size.height * 0.7,
+                    child: Center(
+                      child: Text(
+                        "No notes are available, Please click + button to add a new note !",
+                        style: AppTextStyles.appBody,
+                        textAlign: TextAlign.center,
+                      ),
+                    ),
+                  )
+                : GridView.builder(
+                    shrinkWrap: true,
+                    physics: const NeverScrollableScrollPhysics(),
+                    gridDelegate:
+                        const SliverGridDelegateWithFixedCrossAxisCount(
+                      crossAxisCount: 2,
+                      crossAxisSpacing: AppConstants.kDefaultPdding,
+                      mainAxisSpacing: AppConstants.kDefaultPdding,
+                      childAspectRatio: 6 / 4,
+                    ),
+                    itemCount: noteWithCategeory.length,
+                    itemBuilder: (context, index) {
+                      return GestureDetector(
+                        onTap: () {
+                          AppRouters.appRoute.push("/noteByCategeory",
+                              extra: noteWithCategeory.keys.elementAt(index));
+                        },
+                        child: NotesCard(
+                          cardTiltle: noteWithCategeory.keys.elementAt(index),
+                          noOfNotes:
+                              noteWithCategeory.values.elementAt(index).length,
+                        ),
+                      );
+                    },
+                  )
           ],
         ),
       ),

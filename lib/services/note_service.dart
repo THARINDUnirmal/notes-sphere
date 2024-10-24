@@ -69,4 +69,16 @@ class NoteService {
     }
     return categeryNotes;
   }
+
+  Future<List<NotesModel>> loadNotesByCategeory(String categeory) async {
+    final dynamic cNotes = await _noteBox.get("notes");
+    List<NotesModel> notesByCategeory = [];
+
+    for (final note in cNotes) {
+      if (note.categeory == categeory) {
+        notesByCategeory.add(note);
+      }
+    }
+    return notesByCategeory;
+  }
 }
