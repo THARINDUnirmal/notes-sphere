@@ -81,4 +81,29 @@ class NoteService {
     }
     return notesByCategeory;
   }
+
+  //update note
+  Future<void> updateNotes(NotesModel note) async {
+    try {
+      final dynamic allNotes = await _noteBox.get("notes");
+
+      final int index = allNotes.indexWhere(
+        (element) => element.id == note.id,
+      );
+
+      allNotes[index] = note;
+      await _noteBox.put("notes", allNotes);
+    } catch (error) {
+      print(error.toString());
+    }
+  }
+
+  //remove notes
+  Future<void> deleteNotes(String noteId) async {
+    final dynamic allnotes = await _noteBox.get("notes");
+    allnotes.removeWhere(
+      (element) => element.id == noteId,
+    );
+    await _noteBox.put("notes", allnotes);
+  }
 }

@@ -1,6 +1,10 @@
 import 'package:flutter/material.dart';
 import 'package:notes_sphere/models/notes_model.dart';
 import 'package:notes_sphere/services/note_service.dart';
+import 'package:notes_sphere/utils/app_constants.dart';
+import 'package:notes_sphere/utils/app_text_styles.dart';
+import 'package:notes_sphere/utils/routers/app_routers.dart';
+import 'package:notes_sphere/widgets/all_notes_list_card.dart';
 
 class AllNotesListScreen extends StatefulWidget {
   final String category;
@@ -34,7 +38,56 @@ class _AllNotesListScreenState extends State<AllNotesListScreen> {
   Widget build(BuildContext context) {
     return Scaffold(
       appBar: AppBar(
-        title: Text(widget.category),
+        automaticallyImplyLeading: false,
+        leading: GestureDetector(
+          onTap: () {
+            AppRouters.appRoute.go("/Notes");
+          },
+          child: const Icon(
+            Icons.arrow_back,
+          ),
+        ),
+      ),
+      body: SingleChildScrollView(
+        child: Padding(
+          padding: const EdgeInsets.all(
+            AppConstants.kDefaultPdding,
+          ),
+          child: Column(
+            crossAxisAlignment: CrossAxisAlignment.start,
+            children: [
+              Text(
+                widget.category,
+                style: AppTextStyles.appTitle,
+              ),
+              const SizedBox(
+                height: 30,
+              ),
+              GridView.builder(
+                physics: const NeverScrollableScrollPhysics(),
+                shrinkWrap: true,
+                gridDelegate: const SliverGridDelegateWithFixedCrossAxisCount(
+                    crossAxisCount: 2,
+                    mainAxisSpacing: AppConstants.kDefaultPdding,
+                    crossAxisSpacing: AppConstants.kDefaultPdding,
+                    childAspectRatio: 4 / 7),
+                itemCount: categeoryNotes.length,
+                itemBuilder: (context, index) {
+                  return AllNotesListCard(
+                    title: categeoryNotes[index].title,
+                    cardContent: categeoryNotes[index].content,
+                    methordToUpdate: () async {
+                      await NoteService().updateNotes(categeoryNotes[index]);
+                    },
+                    methordToDelete: () async {
+                      await NoteService().deleteNotes(categeoryNotes[index].id);
+                    },
+                  );
+                },
+              )
+            ],
+          ),
+        ),
       ),
     );
   }
