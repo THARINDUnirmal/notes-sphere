@@ -2,9 +2,12 @@ import 'package:flutter/material.dart';
 import 'package:notes_sphere/utils/app_constants.dart';
 import 'package:notes_sphere/utils/app_text_styles.dart';
 import 'package:notes_sphere/utils/colors.dart';
+import 'package:notes_sphere/utils/routers/app_routers.dart';
 
 class InputBottomSheetWidget extends StatefulWidget {
-  const InputBottomSheetWidget({super.key});
+  const InputBottomSheetWidget({
+    super.key,
+  });
 
   @override
   State<InputBottomSheetWidget> createState() => _InputBottomSheetWidgetState();
@@ -46,19 +49,25 @@ class _InputBottomSheetWidgetState extends State<InputBottomSheetWidget> {
           const SizedBox(
             height: AppConstants.kDefaultPdding * 3,
           ),
-          Row(
-            children: [
-              Text(
-                "Create a New Note",
-                style: AppTextStyles.appLaegeDescription,
-              ),
-              const Spacer(),
-              Icon(
-                Icons.arrow_right_outlined,
-                size: 30,
-                color: AppColor.kWhiteColor.withOpacity(0.6),
-              ),
-            ],
+          GestureDetector(
+            onTap: () {
+              Navigator.pop(context);
+              AppRouters.appRoute.push("/new-note-addedPage", extra: false);
+            },
+            child: Row(
+              children: [
+                Text(
+                  "Create a New Note",
+                  style: AppTextStyles.appLaegeDescription,
+                ),
+                const Spacer(),
+                Icon(
+                  Icons.arrow_right_outlined,
+                  size: 30,
+                  color: AppColor.kWhiteColor.withOpacity(0.6),
+                ),
+              ],
+            ),
           ),
           const SizedBox(
             height: 20,
@@ -69,19 +78,25 @@ class _InputBottomSheetWidgetState extends State<InputBottomSheetWidget> {
           const SizedBox(
             height: 20,
           ),
-          Row(
-            children: [
-              Text(
-                "Create New Note Categeory",
-                style: AppTextStyles.appLaegeDescription,
-              ),
-              const Spacer(),
-              Icon(
-                Icons.arrow_right_outlined,
-                size: 30,
-                color: AppColor.kWhiteColor.withOpacity(0.6),
-              ),
-            ],
+          GestureDetector(
+            onTap: () {
+              Navigator.pop(context);
+              AppRouters.appRoute.push("/new-note-addedPage", extra: true);
+            },
+            child: Row(
+              children: [
+                Text(
+                  "Create New Note Categeory",
+                  style: AppTextStyles.appLaegeDescription,
+                ),
+                const Spacer(),
+                Icon(
+                  Icons.arrow_right_outlined,
+                  size: 30,
+                  color: AppColor.kWhiteColor.withOpacity(0.6),
+                ),
+              ],
+            ),
           )
         ],
       ),

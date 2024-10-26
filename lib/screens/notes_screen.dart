@@ -55,9 +55,10 @@ class _NotesScreenState extends State<NotesScreen> {
   //bottome sheet
   void openBottomSheet() {
     showModalBottomSheet(
+      barrierColor: Colors.black.withOpacity(0.7),
       context: context,
       builder: (context) {
-        return InputBottomSheetWidget();
+        return const InputBottomSheetWidget();
       },
     );
   }
