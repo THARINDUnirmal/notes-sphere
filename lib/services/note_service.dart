@@ -106,4 +106,18 @@ class NoteService {
     );
     await _noteBox.put("notes", allnotes);
   }
+
+  //methord to get category list
+  Future<List<String>> loadCategory() async {
+    List<String> categoryList = [];
+    final dynamic allNotes = await _noteBox.get("notes");
+
+    for (final note in allNotes) {
+      if (!allNotes.contains(note.categeory)) {
+        categoryList.add(note.categeory);
+      }
+    }
+
+    return categoryList;
+  }
 }
