@@ -1,9 +1,13 @@
 import 'package:flutter/material.dart';
+import 'package:notes_sphere/helpers/app_helpers.dart';
+import 'package:notes_sphere/models/notes_model.dart';
 import 'package:notes_sphere/services/note_service.dart';
 import 'package:notes_sphere/utils/app_constants.dart';
 import 'package:notes_sphere/utils/app_text_styles.dart';
 import 'package:notes_sphere/utils/colors.dart';
+import 'package:notes_sphere/utils/routers/app_routers.dart';
 import 'package:notes_sphere/widgets/submit_button.dart';
+import 'package:uuid/uuid.dart';
 
 class NoteAddScreen extends StatefulWidget {
   final bool isNewCategery;
@@ -27,10 +31,10 @@ class _NoteAddScreenState extends State<NoteAddScreen> {
   List<String> loadAllNotesWithCategory = [];
 
   //form key
-  final GlobalKey _formKey = GlobalKey<FormState>();
+  final _formKey = GlobalKey<FormState>();
 
   //contrallers
-  final TextEditingController _categoryContraller = TextEditingController();
+  String _categoryContraller = "";
   final TextEditingController _newCategoryContraller = TextEditingController();
   final TextEditingController _noteTitle = TextEditingController();
   final TextEditingController _noteContent = TextEditingController();
@@ -42,6 +46,13 @@ class _NoteAddScreenState extends State<NoteAddScreen> {
     setState(() {
       loadAllNotesWithCategory = allNotesModelsList;
     });
+  }
+
+  //despose
+  @override
+  void dispose() {
+    _newCategoryContraller.dispose();
+    super.dispose();
   }
 
   @override
@@ -57,7 +68,7 @@ class _NoteAddScreenState extends State<NoteAddScreen> {
         child: Padding(
           padding: const EdgeInsets.all(10.0),
           child: Column(
-            crossAxisAlignment: CrossAxisAlignment.end,
+            crossAxisAlignment: CrossAxisAlignment.start,
             children: [
               const SizedBox(
                 height: 30,
@@ -68,14 +79,14 @@ class _NoteAddScreenState extends State<NoteAddScreen> {
                   children: [
                     widget.isNewCategery
                         ? TextFormField(
+                            controller: _newCategoryContraller,
                             validator: (value) {
-                              if (value == null) {
+                              if (value == null || value.isEmpty) {
                                 return "Please Enter Category !";
                               } else {
                                 return null;
                               }
                             },
-                            controller: _newCategoryContraller,
                             style: AppTextStyles.appLaegeDescription,
                             decoration: InputDecoration(
                               filled: false,
@@ -98,7 +109,7 @@ class _NoteAddScreenState extends State<NoteAddScreen> {
                           )
                         : DropdownButtonFormField(
                             validator: (value) {
-                              if (value == null) {
+                              if (value == null || value.isEmpty) {
                                 return "Please Select Category !";
                               } else {
                                 return null;
@@ -124,21 +135,25 @@ class _NoteAddScreenState extends State<NoteAddScreen> {
                                 );
                               },
                             ).toList(),
-                            onChanged: (value) {},
+                            onChanged: (value) {
+                              setState(() {
+                                _categoryContraller = value!;
+                              });
+                            },
                           ),
                     const SizedBox(
                       height: AppConstants.kDefaultPdding,
                     ),
                     TextFormField(
+                      controller: _noteTitle,
                       validator: (value) {
-                        if (value == null) {
+                        if (value == null || value.isEmpty) {
                           return "Please Enter Note Title !";
                         } else {
                           return null;
                         }
                       },
                       maxLines: 2,
-                      controller: _noteTitle,
                       style: AppTextStyles.appTitle.copyWith(
                         fontSize: 40,
                       ),
@@ -163,15 +178,15 @@ class _NoteAddScreenState extends State<NoteAddScreen> {
                       height: AppConstants.kDefaultPdding / 2,
                     ),
                     TextFormField(
+                      controller: _noteContent,
                       validator: (value) {
-                        if (value == null) {
+                        if (value == null || value.isEmpty) {
                           return "Please Enter Your Content !";
                         } else {
                           return null;
                         }
                       },
                       maxLines: 12,
-                      controller: _noteContent,
                       style: AppTextStyles.appTitle.copyWith(
                         fontSize: 20,
                       ),
@@ -192,21 +207,74 @@ class _NoteAddScreenState extends State<NoteAddScreen> {
                         ),
                       ),
                     ),
+                    const SizedBox(
+                      height: 5,
+                    ),
+                    const Divider(
+                      thickness: 2,
+                    ),
+                    const SizedBox(
+                      height: 10,
+                    ),
+                    Row(
+                      mainAxisAlignment: MainAxisAlignment.end,
+                      children: [
+                        ElevatedButton(
+                          style: const ButtonStyle(
+                            backgroundColor: WidgetStatePropertyAll(
+                              AppColor.kFaBuColor,
+                            ),
+                          ),
+                          onPressed: () async {
+                            try {
+                              if (_formKey.currentState!.validate()) {
+                                String noteTitleString = _noteTitle.text;
+                                String noteContentString = _noteContent.text;
+                                String newNoteCategoryString =
+                                    widget.isNewCategery
+                                        ? _newCategoryContraller.text
+                                        : _categoryContraller;
+
+                                //save note
+
+                                NotesModel addNote = NotesModel(
+                                  title: noteTitleString,
+                                  categeory: newNoteCategoryString,
+                                  content: noteContentString,
+                                  date: DateTime.now(),
+                                  id: const Uuid().v4(),
+                                );
+
+                                await NoteService().saveNote(addNote);
+
+                                if (context.mounted) {
+                                  AppHelpers.appMessenger(
+                                      context, "Note saved successfuly");
+                                }
+                                _noteTitle.clear();
+                                _noteContent.clear();
+                                _newCategoryContraller.clear();
+
+                                AppRouters.appRoute.push("/Notes");
+                              }
+                            } catch (e) {
+                              print(e.toString());
+
+                              if (context.mounted) {
+                                AppHelpers.appMessenger(
+                                    context, "Failed to save note");
+                              }
+                            }
+                          },
+                          child: Text(
+                            "Save note",
+                            style: AppTextStyles.appLaegeDescription,
+                          ),
+                        )
+                      ],
+                    ),
                   ],
                 ),
-              ),
-              const SizedBox(
-                height: 5,
-              ),
-              const Divider(
-                thickness: 2,
-              ),
-              const SizedBox(
-                height: 10,
-              ),
-              GestureDetector(
-                onTap: () {},
-                child: const SubmitButton(),
               ),
             ],
           ),

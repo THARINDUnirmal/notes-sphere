@@ -56,6 +56,18 @@ class NoteService {
     }
   }
 
+  //save notes methord
+  Future<void> saveNote(NotesModel note) async {
+    try {
+      final dynamic allNotes = await _noteBox.get("notes");
+      allNotes.add(note);
+
+      await _noteBox.put("notes", allNotes);
+    } catch (e) {
+      print(e.toString());
+    }
+  }
+
   //filtering to categeories
   Map<String, List<NotesModel>> noteCategeorise(List<NotesModel> notesList) {
     Map<String, List<NotesModel>> categeryNotes = {};
