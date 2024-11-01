@@ -34,6 +34,10 @@ class _AllNotesListScreenState extends State<AllNotesListScreen> {
     setState(() {});
   }
 
+  void _editeNotePage(NotesModel note) {
+    AppRouters.appRoute.push("/NoteEditScreen", extra: note);
+  }
+
   @override
   Widget build(BuildContext context) {
     return Scaffold(
@@ -77,10 +81,11 @@ class _AllNotesListScreenState extends State<AllNotesListScreen> {
                     title: categeoryNotes[index].title,
                     cardContent: categeoryNotes[index].content,
                     methordToUpdate: () async {
-                      await NoteService().updateNotes(categeoryNotes[index]);
+                      _editeNotePage(categeoryNotes[index]);
                     },
                     methordToDelete: () async {
                       await NoteService().deleteNotes(categeoryNotes[index].id);
+                      AppRouters.appRoute.go("/Notes");
                     },
                   );
                 },

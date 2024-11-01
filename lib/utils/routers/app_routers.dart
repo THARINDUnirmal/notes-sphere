@@ -1,8 +1,10 @@
 import 'package:flutter/material.dart';
 import 'package:go_router/go_router.dart';
+import 'package:notes_sphere/models/notes_model.dart';
 import 'package:notes_sphere/screens/all_notes_list_screen.dart';
 import 'package:notes_sphere/screens/home_screen.dart';
 import 'package:notes_sphere/screens/note_add_screen.dart';
+import 'package:notes_sphere/screens/note_edit_screen.dart';
 import 'package:notes_sphere/screens/notes_screen.dart';
 
 class AppRouters {
@@ -37,6 +39,13 @@ class AppRouters {
         builder: (context, state) {
           final bool isNewCategeory = state.extra as bool;
           return NoteAddScreen(isNewCategery: isNewCategeory);
+        },
+      ),
+      GoRoute(
+        path: "/NoteEditScreen",
+        builder: (context, state) {
+          final NotesModel note = state.extra as NotesModel;
+          return NoteEditScreen(note: note);
         },
       )
     ],

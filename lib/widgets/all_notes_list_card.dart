@@ -29,10 +29,11 @@ class _AllNotesListCardState extends State<AllNotesListCard> {
       width: MediaQuery.of(context).size.width * 0.45,
       height: MediaQuery.of(context).size.height * 0.3,
       decoration: BoxDecoration(
-          color: AppColor.kCardColor,
-          borderRadius: BorderRadius.circular(
-            AppConstants.kDefaultPdding,
-          )),
+        color: AppColor.kCardColor,
+        borderRadius: BorderRadius.circular(
+          AppConstants.kDefaultPdding,
+        ),
+      ),
       child: Column(
         crossAxisAlignment: CrossAxisAlignment.start,
         children: [
@@ -40,11 +41,7 @@ class _AllNotesListCardState extends State<AllNotesListCard> {
             mainAxisAlignment: MainAxisAlignment.end,
             children: [
               IconButton(
-                onPressed: () async {
-                  setState(() {
-                    widget.methordToUpdate;
-                  });
-                },
+                onPressed: widget.methordToUpdate,
                 icon: Icon(
                   Icons.edit_outlined,
                   size: 30,
@@ -55,11 +52,7 @@ class _AllNotesListCardState extends State<AllNotesListCard> {
                 width: 10,
               ),
               IconButton(
-                onPressed: () async {
-                  setState(() {
-                    widget.methordToDelete;
-                  });
-                },
+                onPressed: widget.methordToDelete,
                 icon: Icon(
                   Icons.delete_outline,
                   size: 30,

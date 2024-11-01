@@ -56,6 +56,16 @@ class NoteService {
     }
   }
 
+  //load all notes list
+  Future<List<NotesModel>> howManyNote() async {
+    final dynamic allNotes = await _noteBox.get("notes");
+    if (allNotes != null && allNotes is List<dynamic>) {
+      return allNotes.cast<NotesModel>().toList();
+    } else {
+      return [];
+    }
+  }
+
   //save notes methord
   Future<void> saveNote(NotesModel note) async {
     try {

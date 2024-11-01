@@ -1,5 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:notes_sphere/helpers/app_helpers.dart';
+
 import 'package:notes_sphere/models/notes_model.dart';
 import 'package:notes_sphere/services/note_service.dart';
 import 'package:notes_sphere/utils/app_constants.dart';
@@ -7,23 +8,24 @@ import 'package:notes_sphere/utils/app_text_styles.dart';
 import 'package:notes_sphere/utils/colors.dart';
 import 'package:notes_sphere/utils/routers/app_routers.dart';
 
-import 'package:uuid/uuid.dart';
+class NoteEditScreen extends StatefulWidget {
+  final NotesModel note;
 
-class NoteAddScreen extends StatefulWidget {
-  final bool isNewCategery;
-
-  const NoteAddScreen({
+  const NoteEditScreen({
     super.key,
-    required this.isNewCategery,
+    required this.note,
   });
 
   @override
-  State<NoteAddScreen> createState() => _NoteAddScreenState();
+  State<NoteEditScreen> createState() => _NoteEditScreenState();
 }
 
-class _NoteAddScreenState extends State<NoteAddScreen> {
+class _NoteEditScreenState extends State<NoteEditScreen> {
   @override
   void initState() {
+    _categoryContraller = widget.note.categeory;
+    _noteTitle.text = widget.note.title;
+    _noteContent.text = widget.note.content;
     loadCategeroy();
     super.initState();
   }
@@ -35,7 +37,7 @@ class _NoteAddScreenState extends State<NoteAddScreen> {
 
   //contrallers
   String _categoryContraller = "";
-  final TextEditingController _newCategoryContraller = TextEditingController();
+
   final TextEditingController _noteTitle = TextEditingController();
   final TextEditingController _noteContent = TextEditingController();
 
@@ -51,7 +53,6 @@ class _NoteAddScreenState extends State<NoteAddScreen> {
   //despose
   @override
   void dispose() {
-    _newCategoryContraller.dispose();
     _noteTitle.dispose();
     _noteContent.dispose();
     super.dispose();
@@ -62,7 +63,7 @@ class _NoteAddScreenState extends State<NoteAddScreen> {
     return Scaffold(
       appBar: AppBar(
         title: Text(
-          "Create Note",
+          "eddit note",
           style: AppTextStyles.appSubTitle,
         ),
       ),
@@ -79,70 +80,41 @@ class _NoteAddScreenState extends State<NoteAddScreen> {
                 key: _formKey,
                 child: Column(
                   children: [
-                    widget.isNewCategery
-                        ? TextFormField(
-                            controller: _newCategoryContraller,
-                            validator: (value) {
-                              if (value == null || value.isEmpty) {
-                                return "Please Enter Category !";
-                              } else {
-                                return null;
-                              }
-                            },
-                            style: AppTextStyles.appLaegeDescription,
-                            decoration: InputDecoration(
-                              filled: false,
-                              fillColor: AppColor.kCardColor,
-                              border: OutlineInputBorder(
-                                borderSide: BorderSide(
-                                  color: AppColor.kWhiteColor.withOpacity(0.5),
-                                ),
-                                borderRadius: BorderRadius.circular(
-                                  AppConstants.kDefaultPdding,
-                                ),
-                              ),
-                              hintText: "New Category",
-                              hintStyle:
-                                  AppTextStyles.appLaegeDescription.copyWith(
-                                fontWeight: FontWeight.w600,
-                                color: AppColor.kWhiteColor.withOpacity(0.7),
-                              ),
-                            ),
-                          )
-                        : DropdownButtonFormField(
-                            validator: (value) {
-                              if (value == null || value.isEmpty) {
-                                return "Please Select Category !";
-                              } else {
-                                return null;
-                              }
-                            },
-                            hint: const Text("Select Category !"),
-                            style: AppTextStyles.appLaegeDescription,
-                            decoration: InputDecoration(
-                              filled: false,
-                              border: OutlineInputBorder(
-                                borderRadius: BorderRadius.circular(
-                                  AppConstants.kDefaultPdding,
-                                ),
-                              ),
-                            ),
-                            items: loadAllNotesWithCategory.map(
-                              (e) {
-                                return DropdownMenuItem(
-                                  value: e,
-                                  child: Text(
-                                    e.toString(),
-                                  ),
-                                );
-                              },
-                            ).toList(),
-                            onChanged: (value) {
-                              setState(() {
-                                _categoryContraller = value!;
-                              });
-                            },
+                    DropdownButtonFormField(
+                      validator: (value) {
+                        if (value == null || value.isEmpty) {
+                          return "Please Select Category !";
+                        } else {
+                          return null;
+                        }
+                      },
+                      value: _categoryContraller,
+                      hint: const Text("Select Category !"),
+                      style: AppTextStyles.appLaegeDescription,
+                      decoration: InputDecoration(
+                        filled: false,
+                        border: OutlineInputBorder(
+                          borderRadius: BorderRadius.circular(
+                            AppConstants.kDefaultPdding,
                           ),
+                        ),
+                      ),
+                      items: loadAllNotesWithCategory.map(
+                        (e) {
+                          return DropdownMenuItem(
+                            value: e,
+                            child: Text(
+                              e.toString(),
+                            ),
+                          );
+                        },
+                      ).toList(),
+                      onChanged: (value) {
+                        setState(() {
+                          _categoryContraller = value!;
+                        });
+                      },
+                    ),
                     const SizedBox(
                       height: AppConstants.kDefaultPdding,
                     ),
@@ -230,46 +202,35 @@ class _NoteAddScreenState extends State<NoteAddScreen> {
                           onPressed: () async {
                             try {
                               if (_formKey.currentState!.validate()) {
-                                String noteTitleString = _noteTitle.text;
-                                String noteContentString = _noteContent.text;
-                                String newNoteCategoryString =
-                                    widget.isNewCategery
-                                        ? _newCategoryContraller.text
-                                        : _categoryContraller;
-
-                                //save note
-
-                                NotesModel addNote = NotesModel(
-                                  title: noteTitleString,
-                                  categeory: newNoteCategoryString,
-                                  content: noteContentString,
-                                  date: DateTime.now(),
-                                  id: const Uuid().v4(),
+                                await NoteService().updateNotes(
+                                  NotesModel(
+                                    title: _noteTitle.text,
+                                    categeory: _categoryContraller,
+                                    content: _noteContent.text,
+                                    date: DateTime.now(),
+                                    id: widget.note.id,
+                                  ),
                                 );
-
-                                await NoteService().saveNote(addNote);
-
-                                if (context.mounted) {
-                                  AppHelpers.appMessenger(
-                                      context, "Note saved successfuly");
-                                }
-                                _noteTitle.clear();
-                                _noteContent.clear();
-                                _newCategoryContraller.clear();
-
-                                AppRouters.appRoute.push("/Notes");
                               }
+
+                              if (context.mounted) {
+                                AppHelpers.appMessenger(
+                                    context, "Note update successfuly");
+                              }
+
+                              //navigate
+                              AppRouters.appRoute.push("/Notes");
                             } catch (e) {
                               print(e.toString());
 
                               if (context.mounted) {
                                 AppHelpers.appMessenger(
-                                    context, "Failed to save note");
+                                    context, "Failed to update note");
                               }
                             }
                           },
                           child: Text(
-                            "Save note",
+                            "Update note",
                             style: AppTextStyles.appLaegeDescription,
                           ),
                         )

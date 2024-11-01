@@ -70,7 +70,7 @@ class _NotesScreenState extends State<NotesScreen> {
         automaticallyImplyLeading: false,
         leading: GestureDetector(
           onTap: () {
-            AppRouters.appRoute.go("/");
+            AppRouters.appRoute.push("/");
           },
           child: const Icon(
             Icons.arrow_back,
@@ -101,7 +101,7 @@ class _NotesScreenState extends State<NotesScreen> {
                       height: MediaQuery.of(context).size.height * 0.7,
                       child: Center(
                         child: Text(
-                          "No notes are available, Please click + button to add a new note !",
+                          "No notes are available, Please click plus (+) button to add a new note !",
                           style: AppTextStyles.appBody,
                           textAlign: TextAlign.center,
                         ),

@@ -1,4 +1,6 @@
 import 'package:flutter/material.dart';
+import 'package:notes_sphere/models/notes_model.dart';
+import 'package:notes_sphere/services/note_service.dart';
 import 'package:notes_sphere/utils/app_constants.dart';
 import 'package:notes_sphere/utils/app_text_styles.dart';
 import 'package:notes_sphere/utils/routers/app_routers.dart';
@@ -13,6 +15,21 @@ class HomeScreen extends StatefulWidget {
 }
 
 class _HomeScreenState extends State<HomeScreen> {
+  int howManyNotes = 0;
+  @override
+  void initState() {
+    getAllNotesCount();
+    super.initState();
+  }
+
+  Future<void> getAllNotesCount() async {
+    List<NotesModel> allNotes = [];
+    allNotes = await NoteService().howManyNote();
+    setState(() {
+      howManyNotes = allNotes.length;
+    });
+  }
+
   @override
   Widget build(BuildContext context) {
     return Scaffold(
@@ -45,9 +62,9 @@ class _HomeScreenState extends State<HomeScreen> {
                   onTap: () {
                     AppRouters.appRoute.push("/Notes");
                   },
-                  child: const NotesTodosCard(
+                  child: NotesTodosCard(
                     cardTitle: "Notes",
-                    noOFNoteOrTodos: "4 Notes",
+                    noOFNoteOrTodos: "$howManyNotes Notes",
                     cardIcon: Icons.bookmark_add_outlined,
                   ),
                 ),
