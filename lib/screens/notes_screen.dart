@@ -70,7 +70,7 @@ class _NotesScreenState extends State<NotesScreen> {
         automaticallyImplyLeading: false,
         leading: GestureDetector(
           onTap: () {
-            AppRouters.appRoute.push("/");
+            AppRouters.appRoute.go("/");
           },
           child: const Icon(
             Icons.arrow_back,

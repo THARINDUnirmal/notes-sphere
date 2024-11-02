@@ -28,7 +28,7 @@ class _NoteAddScreenState extends State<NoteAddScreen> {
     super.initState();
   }
 
-  List<String> loadAllNotesWithCategory = [];
+  Set<String> loadAllNotesWithCategory = {};
 
   //form key
   final _formKey = GlobalKey<FormState>();
@@ -41,7 +41,7 @@ class _NoteAddScreenState extends State<NoteAddScreen> {
 
   //loadv note categorys
   Future<void> loadCategeroy() async {
-    List<String> allNotesModelsList = await NoteService().loadCategory();
+    Set<String> allNotesModelsList = await NoteService().loadCategory();
 
     setState(() {
       loadAllNotesWithCategory = allNotesModelsList;

@@ -78,30 +78,36 @@ class _AllNotesListScreenState extends State<AllNotesListScreen> {
                     childAspectRatio: 4 / 7),
                 itemCount: categeoryNotes.length,
                 itemBuilder: (context, index) {
-                  return AllNotesListCard(
-                    title: categeoryNotes[index].title,
-                    cardContent: categeoryNotes[index].content,
-                    methordToUpdate: () async {
-                      _editeNotePage(categeoryNotes[index]);
+                  return GestureDetector(
+                    onTap: () {
+                      AppRouters.appRoute.push("/DisplayNoteScreen",
+                          extra: categeoryNotes[index]);
                     },
-                    methordToDelete: () async {
-                      try {
-                        await NoteService()
-                            .deleteNotes(categeoryNotes[index].id);
-                        if (context.mounted) {
-                          AppHelpers.appMessenger(
-                              context, "Note delete successfuly");
-                        }
+                    child: AllNotesListCard(
+                      title: categeoryNotes[index].title,
+                      cardContent: categeoryNotes[index].content,
+                      methordToUpdate: () async {
+                        _editeNotePage(categeoryNotes[index]);
+                      },
+                      methordToDelete: () async {
+                        try {
+                          await NoteService()
+                              .deleteNotes(categeoryNotes[index].id);
+                          if (context.mounted) {
+                            AppHelpers.appMessenger(
+                                context, "Note delete successfuly");
+                          }
 
-                        AppRouters.appRoute.go("/Notes");
-                      } catch (e) {
-                        print(e.toString());
-                        if (context.mounted) {
-                          AppHelpers.appMessenger(
-                              context, "Failed to delete note");
+                          AppRouters.appRoute.push("/Notes");
+                        } catch (e) {
+                          print(e.toString());
+                          if (context.mounted) {
+                            AppHelpers.appMessenger(
+                                context, "Failed to delete note");
+                          }
                         }
-                      }
-                    },
+                      },
+                    ),
                   );
                 },
               )

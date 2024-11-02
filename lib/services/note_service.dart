@@ -6,7 +6,7 @@ class NoteService {
   List<NotesModel> noteList = [
     NotesModel(
       id: const Uuid().v4(),
-      title: "Meeting Notes",
+      title: "Meeting Notes😎",
       categeory: "Work",
       content:
           "Discussed project deadlines and deliverables. Assigned tasks to team members and set up follow-up meetings to track progress.",
@@ -17,13 +17,13 @@ class NoteService {
       title: "Grocery List",
       categeory: "Personal",
       content:
-          "Bought milk, eggs, bread, fruits, and vegetables from the local grocery store. Also added some snacks for the week.",
+          "😗Bought milk, eggs, bread, fruits, and vegetables from the local grocery store. Also added some snacks for the week.",
       date: DateTime.now(),
     ),
     NotesModel(
       id: const Uuid().v4(),
       title: "Book Recommendations",
-      categeory: "Hobby",
+      categeory: "Hobby🥴",
       content:
           "Recently read 'Sapiens' by Yuval Noah Harari, which offered fascinating insights into the history of humankind. Also enjoyed 'Atomic Habits' by James Clear, a practical guide to building good habits and breaking bad ones.",
       date: DateTime.now(),
@@ -134,8 +134,8 @@ class NoteService {
   }
 
   //methord to get category list
-  Future<List<String>> loadCategory() async {
-    List<String> categoryList = [];
+  Future<Set<String>> loadCategory() async {
+    Set<String> categoryList = {};
     final dynamic allNotes = await _noteBox.get("notes");
 
     for (final note in allNotes) {

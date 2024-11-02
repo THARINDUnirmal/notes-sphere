@@ -30,7 +30,7 @@ class _NoteEditScreenState extends State<NoteEditScreen> {
     super.initState();
   }
 
-  List<String> loadAllNotesWithCategory = [];
+  Set<String> loadAllNotesWithCategory = {};
 
   //form key
   final _formKey = GlobalKey<FormState>();
@@ -43,7 +43,7 @@ class _NoteEditScreenState extends State<NoteEditScreen> {
 
   //loadv note categorys
   Future<void> loadCategeroy() async {
-    List<String> allNotesModelsList = await NoteService().loadCategory();
+    Set<String> allNotesModelsList = await NoteService().loadCategory();
 
     setState(() {
       loadAllNotesWithCategory = allNotesModelsList;
@@ -63,7 +63,7 @@ class _NoteEditScreenState extends State<NoteEditScreen> {
     return Scaffold(
       appBar: AppBar(
         title: Text(
-          "eddit note",
+          "Edit Note",
           style: AppTextStyles.appSubTitle,
         ),
       ),

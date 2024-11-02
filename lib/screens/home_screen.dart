@@ -60,7 +60,7 @@ class _HomeScreenState extends State<HomeScreen> {
               children: [
                 GestureDetector(
                   onTap: () {
-                    AppRouters.appRoute.push("/Notes");
+                    AppRouters.appRoute.go("/Notes");
                   },
                   child: NotesTodosCard(
                     cardTitle: "Notes",
