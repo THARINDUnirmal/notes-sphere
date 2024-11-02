@@ -1,4 +1,5 @@
 import 'package:flutter/material.dart';
+import 'package:notes_sphere/helpers/app_helpers.dart';
 import 'package:notes_sphere/models/notes_model.dart';
 import 'package:notes_sphere/services/note_service.dart';
 import 'package:notes_sphere/utils/app_constants.dart';
@@ -84,8 +85,22 @@ class _AllNotesListScreenState extends State<AllNotesListScreen> {
                       _editeNotePage(categeoryNotes[index]);
                     },
                     methordToDelete: () async {
-                      await NoteService().deleteNotes(categeoryNotes[index].id);
-                      AppRouters.appRoute.go("/Notes");
+                      try {
+                        await NoteService()
+                            .deleteNotes(categeoryNotes[index].id);
+                        if (context.mounted) {
+                          AppHelpers.appMessenger(
+                              context, "Note delete successfuly");
+                        }
+
+                        AppRouters.appRoute.go("/Notes");
+                      } catch (e) {
+                        print(e.toString());
+                        if (context.mounted) {
+                          AppHelpers.appMessenger(
+                              context, "Failed to delete note");
+                        }
+                      }
                     },
                   );
                 },

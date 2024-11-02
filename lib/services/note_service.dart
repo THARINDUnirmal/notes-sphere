@@ -122,11 +122,15 @@ class NoteService {
 
   //remove notes
   Future<void> deleteNotes(String noteId) async {
-    final dynamic allnotes = await _noteBox.get("notes");
-    allnotes.removeWhere(
-      (element) => element.id == noteId,
-    );
-    await _noteBox.put("notes", allnotes);
+    try {
+      final dynamic allnotes = await _noteBox.get("notes");
+      allnotes.removeWhere(
+        (element) => element.id == noteId,
+      );
+      await _noteBox.put("notes", allnotes);
+    } catch (e) {
+      print(e.toString());
+    }
   }
 
   //methord to get category list
