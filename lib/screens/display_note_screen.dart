@@ -1,9 +1,11 @@
 import 'package:flutter/material.dart';
+import 'package:intl/intl.dart';
 import 'package:notes_sphere/helpers/app_helpers.dart';
 import 'package:notes_sphere/models/notes_model.dart';
 import 'package:notes_sphere/services/note_service.dart';
 import 'package:notes_sphere/utils/app_constants.dart';
 import 'package:notes_sphere/utils/app_text_styles.dart';
+import 'package:notes_sphere/utils/colors.dart';
 import 'package:notes_sphere/utils/routers/app_routers.dart';
 
 class DisplayNoteScreen extends StatelessWidget {
@@ -20,6 +22,7 @@ class DisplayNoteScreen extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
+    String date = DateFormat("MMMM / yyyy / dd").format(note.date);
     return Scaffold(
       appBar: AppBar(
         actions: [
@@ -68,7 +71,36 @@ class DisplayNoteScreen extends StatelessWidget {
             children: [
               Text(
                 note.title,
-                style: AppTextStyles.appTitle,
+                style: AppTextStyles.appTitle.copyWith(
+                  fontSize: 32,
+                ),
+              ),
+              const SizedBox(
+                height: AppConstants.kDefaultPdding / 2,
+              ),
+              Row(
+                mainAxisAlignment: MainAxisAlignment.end,
+                children: [
+                  Column(
+                    crossAxisAlignment: CrossAxisAlignment.end,
+                    children: [
+                      Text(
+                        note.categeory,
+                        style: AppTextStyles.appSmallDescription.copyWith(
+                          fontSize: 18,
+                          color: Colors.amber,
+                        ),
+                      ),
+                      Text(
+                        date,
+                        style: AppTextStyles.appSmallDescription.copyWith(
+                          fontWeight: FontWeight.w300,
+                          color: Colors.amber,
+                        ),
+                      ),
+                    ],
+                  ),
+                ],
               ),
               const SizedBox(
                 height: AppConstants.kDefaultPdding,
@@ -76,9 +108,11 @@ class DisplayNoteScreen extends StatelessWidget {
               Text(
                 note.content,
                 style: AppTextStyles.appSmallDescription.copyWith(
-                  fontSize: 18,
-                ),
-              )
+                    fontSize: 20, color: AppColor.kWhiteColor.withOpacity(0.9)),
+              ),
+              const SizedBox(
+                height: 10,
+              ),
             ],
           ),
         ),

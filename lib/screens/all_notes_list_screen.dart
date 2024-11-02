@@ -46,7 +46,7 @@ class _AllNotesListScreenState extends State<AllNotesListScreen> {
         automaticallyImplyLeading: false,
         leading: GestureDetector(
           onTap: () {
-            AppRouters.appRoute.go("/Notes");
+            AppRouters.appRoute.push("/Notes");
           },
           child: const Icon(
             Icons.arrow_back,
