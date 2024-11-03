@@ -68,10 +68,15 @@ class _HomeScreenState extends State<HomeScreen> {
                     cardIcon: Icons.bookmark_add_outlined,
                   ),
                 ),
-                const NotesTodosCard(
-                  cardTitle: "To-Do List",
-                  noOFNoteOrTodos: "100 Tasks",
-                  cardIcon: Icons.calendar_month_outlined,
+                GestureDetector(
+                  onTap: () {
+                    AppRouters.appRoute.push("/ToDoScreen");
+                  },
+                  child: const NotesTodosCard(
+                    cardTitle: "To-Do List",
+                    noOFNoteOrTodos: "100 Tasks",
+                    cardIcon: Icons.calendar_month_outlined,
+                  ),
                 ),
               ],
             ),
