@@ -58,6 +58,10 @@ class _ToDoScreenState extends State<ToDoScreen>
       ]),
       floatingActionButton: FloatingActionButton(
         shape: RoundedRectangleBorder(
+          side: const BorderSide(
+            width: 2,
+            color: AppColor.kWhiteColor,
+          ),
           borderRadius: BorderRadius.circular(100),
         ),
         onPressed: () {},
