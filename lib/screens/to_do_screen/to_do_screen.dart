@@ -1,4 +1,8 @@
 import 'package:flutter/material.dart';
+import 'package:notes_sphere/models/todo_model.dart';
+import 'package:notes_sphere/screens/to_do_screen/completed_to_do_screen.dart';
+import 'package:notes_sphere/screens/to_do_screen/incomplete_to_do_screen.dart';
+import 'package:notes_sphere/services/todo_service.dart';
 import 'package:notes_sphere/utils/app_text_styles.dart';
 import 'package:notes_sphere/utils/colors.dart';
 
@@ -11,12 +15,52 @@ class ToDoScreen extends StatefulWidget {
 
 class _ToDoScreenState extends State<ToDoScreen>
     with SingleTickerProviderStateMixin {
+  //all todo list
+  List<TodoModel> allTodos = [];
+  List<TodoModel> incompleteTodos = [];
+  List<TodoModel> completeTodos = [];
+
   //create tab contraller
   late TabController _tabContraller;
   @override
   void initState() {
     _tabContraller = TabController(length: 2, vsync: this);
+    checkUserIsNew();
     super.initState();
+  }
+
+  //check user is new user
+  Future<void> checkUserIsNew() async {
+    final bool isNew = await TodoService().isUserNew();
+
+    //save initial todos
+
+    if (isNew) {
+      await TodoService().saveInitialTodos();
+    }
+    loadAllInitialTodos();
+  }
+
+  //load initial todos
+  Future<void> loadAllInitialTodos() async {
+    List<TodoModel> alltodoes = await TodoService().fetchInitialTodos();
+    setState(() {
+      //all todos
+      allTodos = alltodoes;
+      //incomplete todos
+      incompleteTodos = alltodoes
+          .where(
+            (element) => element.isComplete == false,
+          )
+          .toList();
+
+      //complete todos
+      completeTodos = alltodoes
+          .where(
+            (element) => element.isComplete,
+          )
+          .toList();
+    });
   }
 
   @override
@@ -43,18 +87,10 @@ class _ToDoScreenState extends State<ToDoScreen>
         ),
       ),
       body: TabBarView(controller: _tabContraller, children: [
-        Center(
-          child: Text(
-            "ToDo Tab",
-            style: AppTextStyles.appTitle,
-          ),
+        IncompleteToDoScreen(
+          incompleTodos: incompleteTodos,
         ),
-        Center(
-          child: Text(
-            "Completed Tab",
-            style: AppTextStyles.appTitle,
-          ),
-        )
+        CompletedToDoScreen(),
       ]),
       floatingActionButton: FloatingActionButton(
         shape: RoundedRectangleBorder(

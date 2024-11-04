@@ -7,7 +7,7 @@ import 'package:notes_sphere/screens/home_screen.dart';
 import 'package:notes_sphere/screens/note_add_screen.dart';
 import 'package:notes_sphere/screens/note_edit_screen.dart';
 import 'package:notes_sphere/screens/notes_screen.dart';
-import 'package:notes_sphere/screens/to_do_screen.dart';
+import 'package:notes_sphere/screens/to_do_screen/to_do_screen.dart';
 
 class AppRouters {
   static final appRoute = GoRouter(
