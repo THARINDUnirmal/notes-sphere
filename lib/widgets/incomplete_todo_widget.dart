@@ -18,25 +18,30 @@ class IncompleteTodoWidget extends StatefulWidget {
 class _IncompleteTodoWidgetState extends State<IncompleteTodoWidget> {
   @override
   Widget build(BuildContext context) {
-    return ListTile(
-      tileColor: AppColor.kCardColor,
-      title: Text(
-        widget.todo.title,
-        style: AppTextStyles.appLaegeDescription,
+    return Container(
+      margin: const EdgeInsets.only(
+        bottom: 10,
       ),
-      subtitle: Row(
-        children: [
-          Text(
-              "${widget.todo.date.day} / ${widget.todo.date.month} / ${widget.todo.date.year}"),
-          const SizedBox(
-            width: 10,
-          ),
-          Text("${widget.todo.time.hour} : ${widget.todo.time.minute} "),
-        ],
-      ),
-      trailing: Checkbox(
-        value: widget.todo.isComplete,
-        onChanged: (value) {},
+      child: ListTile(
+        tileColor: AppColor.kCardColor,
+        title: Text(
+          widget.todo.title,
+          style: AppTextStyles.appLaegeDescription,
+        ),
+        subtitle: Row(
+          children: [
+            Text(
+                "${widget.todo.date.day}/${widget.todo.date.month}/${widget.todo.date.year}"),
+            const SizedBox(
+              width: 10,
+            ),
+            Text("${widget.todo.time.hour} : ${widget.todo.time.minute} "),
+          ],
+        ),
+        trailing: Checkbox(
+          value: widget.todo.isComplete,
+          onChanged: (value) {},
+        ),
       ),
     );
   }

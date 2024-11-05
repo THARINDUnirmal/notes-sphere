@@ -21,19 +21,18 @@ class _IncompleteToDoScreenState extends State<IncompleteToDoScreen> {
       child: Column(
         mainAxisAlignment: MainAxisAlignment.center,
         children: [
-          GridView.builder(
-            shrinkWrap: true,
-            physics: const NeverScrollableScrollPhysics(),
-            itemCount: widget.incompleTodos.length,
-            gridDelegate: const SliverGridDelegateWithFixedCrossAxisCount(
-                crossAxisCount: 1,
-                mainAxisSpacing: 10,
-                childAspectRatio: 4 / 1),
-            itemBuilder: (context, index) {
-              return IncompleteTodoWidget(
-                todo: widget.incompleTodos[index],
-              );
-            },
+          SizedBox(
+            height: MediaQuery.of(context).size.height * 0.6,
+            width: double.infinity,
+            child: ListView.builder(
+              shrinkWrap: true,
+              itemCount: widget.incompleTodos.length,
+              itemBuilder: (context, index) {
+                return IncompleteTodoWidget(
+                  todo: widget.incompleTodos[index],
+                );
+              },
+            ),
           )
         ],
       ),

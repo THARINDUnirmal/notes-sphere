@@ -90,7 +90,9 @@ class _ToDoScreenState extends State<ToDoScreen>
         IncompleteToDoScreen(
           incompleTodos: incompleteTodos,
         ),
-        CompletedToDoScreen(),
+        CompletedToDoScreen(
+          compleTodos: completeTodos,
+        ),
       ]),
       floatingActionButton: FloatingActionButton(
         shape: RoundedRectangleBorder(
