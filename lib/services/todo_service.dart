@@ -7,7 +7,7 @@ class TodoService {
       title: "Read a Book",
       date: DateTime.now(),
       time: DateTime.now(),
-      isComplete: true,
+      isComplete: false,
     ),
     TodoModel(
       title: "Go for a Walk",
@@ -49,5 +49,20 @@ class TodoService {
       return allTodos.cast<TodoModel>().toList();
     }
     return [];
+  }
+
+  //marck as done
+
+  Future<void> updateTodo(TodoModel todoIndex) async {
+    try {
+      final dynamic allTodos = await _todoBox.get("todos");
+      final int index = allTodos.indexWhere(
+        (element) => element.id == todoIndex.id,
+      );
+      allTodos[index] = todoIndex;
+      await _todoBox.put("todos", allTodos);
+    } catch (e) {
+      print(e.toString());
+    }
   }
 }

@@ -1,9 +1,12 @@
 import 'package:flutter/material.dart';
 import 'package:notes_sphere/models/notes_model.dart';
+import 'package:notes_sphere/models/todo_model.dart';
 import 'package:notes_sphere/services/note_service.dart';
+import 'package:notes_sphere/services/todo_service.dart';
 import 'package:notes_sphere/utils/app_constants.dart';
 import 'package:notes_sphere/utils/app_text_styles.dart';
 import 'package:notes_sphere/utils/routers/app_routers.dart';
+import 'package:notes_sphere/widgets/incomplete_todo_widget.dart';
 import 'package:notes_sphere/widgets/notes_todos_card.dart';
 import 'package:notes_sphere/widgets/progress_card.dart';
 
@@ -16,9 +19,13 @@ class HomeScreen extends StatefulWidget {
 
 class _HomeScreenState extends State<HomeScreen> {
   int howManyNotes = 0;
+  int allTasks = 0;
+  int completedTasks = 0;
+  List<TodoModel> allTodos = [];
   @override
   void initState() {
     getAllNotesCount();
+    loadAllInitialTodos();
     super.initState();
   }
 
@@ -27,6 +34,23 @@ class _HomeScreenState extends State<HomeScreen> {
     allNotes = await NoteService().howManyNote();
     setState(() {
       howManyNotes = allNotes.length;
+    });
+  }
+
+  Future<void> loadAllInitialTodos() async {
+    List<TodoModel> alltodoes = await TodoService().fetchInitialTodos();
+    setState(() {
+      //all todos
+      allTodos = alltodoes;
+
+      //progress card values initial
+      allTasks = allTodos.length;
+      completedTasks = alltodoes
+          .where(
+            (element) => element.isComplete,
+          )
+          .toList()
+          .length;
     });
   }
 
@@ -48,9 +72,9 @@ class _HomeScreenState extends State<HomeScreen> {
             const SizedBox(
               height: 20,
             ),
-            const ProgressCard(
-              completedTasks: 8,
-              totalTasks: 9,
+            ProgressCard(
+              completedTasks: completedTasks,
+              totalTasks: allTasks,
             ),
             const SizedBox(
               height: 20,
@@ -70,7 +94,7 @@ class _HomeScreenState extends State<HomeScreen> {
                 ),
                 GestureDetector(
                   onTap: () {
-                    AppRouters.appRoute.push("/ToDoScreen");
+                    AppRouters.appRoute.go("/ToDoScreen");
                   },
                   child: const NotesTodosCard(
                     cardTitle: "To-Do List",
@@ -95,7 +119,24 @@ class _HomeScreenState extends State<HomeScreen> {
                   style: AppTextStyles.appLaegeDescription,
                 ),
               ],
-            )
+            ),
+            const SizedBox(
+              height: 30,
+            ),
+            // SizedBox(
+            //   height: MediaQuery.of(context).size.height * 0.35,
+            //   width: double.infinity,
+            //   child: ListView.builder(
+            //     physics: const ScrollPhysics(),
+            //     shrinkWrap: true,
+            //     itemCount: allTodos.length,
+            //     itemBuilder: (context, index) {
+            //       return IncompleteTodoWidget(
+            //         todo: allTodos[index],
+            //       );
+            //     },
+            //   ),
+            // ),
           ],
         ),
       ),

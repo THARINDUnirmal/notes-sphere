@@ -4,11 +4,15 @@ import 'package:notes_sphere/utils/app_text_styles.dart';
 import 'package:notes_sphere/utils/colors.dart';
 
 class IncompleteTodoWidget extends StatefulWidget {
+  final bool isComplete;
   final TodoModel todo;
+  final Function() onCheckBoxChnge;
 
   const IncompleteTodoWidget({
     super.key,
     required this.todo,
+    required this.isComplete,
+    required this.onCheckBoxChnge,
   });
 
   @override
@@ -22,8 +26,11 @@ class _IncompleteTodoWidgetState extends State<IncompleteTodoWidget> {
       margin: const EdgeInsets.only(
         bottom: 10,
       ),
+      decoration: BoxDecoration(
+        borderRadius: BorderRadius.circular(10),
+        color: AppColor.kCardColor,
+      ),
       child: ListTile(
-        tileColor: AppColor.kCardColor,
         title: Text(
           widget.todo.title,
           style: AppTextStyles.appLaegeDescription,
@@ -39,8 +46,8 @@ class _IncompleteTodoWidgetState extends State<IncompleteTodoWidget> {
           ],
         ),
         trailing: Checkbox(
-          value: widget.todo.isComplete,
-          onChanged: (value) {},
+          onChanged: (value) => widget.onCheckBoxChnge(),
+          value: widget.isComplete,
         ),
       ),
     );

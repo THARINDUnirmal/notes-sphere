@@ -5,6 +5,7 @@ import 'package:notes_sphere/screens/to_do_screen/incomplete_to_do_screen.dart';
 import 'package:notes_sphere/services/todo_service.dart';
 import 'package:notes_sphere/utils/app_text_styles.dart';
 import 'package:notes_sphere/utils/colors.dart';
+import 'package:notes_sphere/utils/routers/app_routers.dart';
 
 class ToDoScreen extends StatefulWidget {
   const ToDoScreen({super.key});
@@ -26,6 +27,7 @@ class _ToDoScreenState extends State<ToDoScreen>
   void initState() {
     _tabContraller = TabController(length: 2, vsync: this);
     checkUserIsNew();
+    loadAllInitialTodos();
     super.initState();
   }
 
@@ -38,7 +40,6 @@ class _ToDoScreenState extends State<ToDoScreen>
     if (isNew) {
       await TodoService().saveInitialTodos();
     }
-    loadAllInitialTodos();
   }
 
   //load initial todos
@@ -67,6 +68,16 @@ class _ToDoScreenState extends State<ToDoScreen>
   Widget build(BuildContext context) {
     return Scaffold(
       appBar: AppBar(
+        automaticallyImplyLeading: false,
+        leading: IconButton(
+          onPressed: () {
+            AppRouters.appRoute.go("/");
+          },
+          icon: const Icon(
+            Icons.arrow_back,
+            size: 30,
+          ),
+        ),
         bottom: TabBar(
           dividerColor: Colors.black,
           controller: _tabContraller,
@@ -89,9 +100,11 @@ class _ToDoScreenState extends State<ToDoScreen>
       body: TabBarView(controller: _tabContraller, children: [
         IncompleteToDoScreen(
           incompleTodos: incompleteTodos,
+          compleTodos: completeTodos,
         ),
         CompletedToDoScreen(
           compleTodos: completeTodos,
+          inCompleTodos: incompleteTodos,
         ),
       ]),
       floatingActionButton: FloatingActionButton(
