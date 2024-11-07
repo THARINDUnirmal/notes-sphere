@@ -44,11 +44,15 @@ class _NotesTodosCardState extends State<NotesTodosCard> {
           ),
           Text(
             widget.cardTitle,
-            style: AppTextStyles.appLaegeDescription,
+            style: AppTextStyles.appLaegeDescription.copyWith(
+              fontSize: 21,
+            ),
           ),
           Text(
             widget.noOFNoteOrTodos,
-            style: AppTextStyles.appSmallDescription,
+            style: AppTextStyles.appSmallDescription.copyWith(
+              fontSize: 15,
+            ),
           ),
         ],
       ),

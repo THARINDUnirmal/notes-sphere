@@ -6,7 +6,6 @@ import 'package:notes_sphere/services/todo_service.dart';
 import 'package:notes_sphere/utils/app_constants.dart';
 import 'package:notes_sphere/utils/app_text_styles.dart';
 import 'package:notes_sphere/utils/routers/app_routers.dart';
-import 'package:notes_sphere/widgets/incomplete_todo_widget.dart';
 import 'package:notes_sphere/widgets/notes_todos_card.dart';
 import 'package:notes_sphere/widgets/progress_card.dart';
 
@@ -18,39 +17,40 @@ class HomeScreen extends StatefulWidget {
 }
 
 class _HomeScreenState extends State<HomeScreen> {
-  int howManyNotes = 0;
-  int allTasks = 0;
-  int completedTasks = 0;
   List<TodoModel> allTodos = [];
+  List<NotesModel> allNotes = [];
   @override
   void initState() {
-    getAllNotesCount();
-    loadAllInitialTodos();
+    _userIsNew();
     super.initState();
+    setState(() {});
   }
 
-  Future<void> getAllNotesCount() async {
-    List<NotesModel> allNotes = [];
-    allNotes = await NoteService().howManyNote();
+  //check user is new
+  void _userIsNew() async {
+    final bool isNewUser =
+        await TodoService().isUserNew() || await NoteService().isUserIsNew();
+
+    if (isNewUser) {
+      await NoteService().saveInitialNotes();
+      await TodoService().saveInitialTodos();
+    }
+
+    _loadNotes();
+    _loadTodos();
+  }
+
+  Future<void> _loadNotes() async {
+    List<NotesModel> loadedNotes = await NoteService().loadInitialNotes();
     setState(() {
-      howManyNotes = allNotes.length;
+      allNotes = loadedNotes;
     });
   }
 
-  Future<void> loadAllInitialTodos() async {
-    List<TodoModel> alltodoes = await TodoService().fetchInitialTodos();
+  Future<void> _loadTodos() async {
+    List<TodoModel> loadedTodos = await TodoService().fetchInitialTodos();
     setState(() {
-      //all todos
-      allTodos = alltodoes;
-
-      //progress card values initial
-      allTasks = allTodos.length;
-      completedTasks = alltodoes
-          .where(
-            (element) => element.isComplete,
-          )
-          .toList()
-          .length;
+      allTodos = loadedTodos;
     });
   }
 
@@ -73,8 +73,12 @@ class _HomeScreenState extends State<HomeScreen> {
               height: 20,
             ),
             ProgressCard(
-              completedTasks: completedTasks,
-              totalTasks: allTasks,
+              completedTasks: allTodos
+                  .where(
+                    (element) => element.isComplete,
+                  )
+                  .length,
+              totalTasks: allTodos.length,
             ),
             const SizedBox(
               height: 20,
@@ -88,7 +92,7 @@ class _HomeScreenState extends State<HomeScreen> {
                   },
                   child: NotesTodosCard(
                     cardTitle: "Notes",
-                    noOFNoteOrTodos: "$howManyNotes Notes",
+                    noOFNoteOrTodos: "${allNotes.length} Notes",
                     cardIcon: Icons.bookmark_add_outlined,
                   ),
                 ),
@@ -96,9 +100,9 @@ class _HomeScreenState extends State<HomeScreen> {
                   onTap: () {
                     AppRouters.appRoute.go("/ToDoScreen");
                   },
-                  child: const NotesTodosCard(
+                  child: NotesTodosCard(
                     cardTitle: "To-Do List",
-                    noOFNoteOrTodos: "100 Tasks",
+                    noOFNoteOrTodos: "${allTodos.length} Tasks",
                     cardIcon: Icons.calendar_month_outlined,
                   ),
                 ),
