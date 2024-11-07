@@ -75,4 +75,15 @@ class TodoService {
       print(e.toString());
     }
   }
+
+  //todo remove methord
+  Future<void> removeTodo(TodoModel todo) async {
+    try {
+      final dynamic allTodos = await _todoBox.get("todos");
+      allTodos.remove(todo);
+      await _todoBox.put("todos", allTodos);
+    } catch (e) {
+      print(e.toString());
+    }
+  }
 }

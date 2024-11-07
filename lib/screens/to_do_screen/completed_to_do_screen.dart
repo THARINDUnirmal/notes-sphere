@@ -64,10 +64,20 @@ class _CompletedToDoScreenState extends State<CompletedToDoScreen> {
               itemCount: widget.compleTodos.length,
               itemBuilder: (context, index) {
                 final TodoModel completeTodoIndex = widget.compleTodos[index];
-                return IncompleteTodoWidget(
-                  isComplete: true,
-                  todo: completeTodoIndex,
-                  onCheckBoxChnge: () => _markAsUnone(completeTodoIndex),
+                return Dismissible(
+                  key: Key(completeTodoIndex.id.toString()),
+                  onDismissed: (direction) {
+                    setState(() {
+                      widget.compleTodos.removeAt(index);
+                      TodoService().removeTodo(completeTodoIndex);
+                    });
+                    AppHelpers.appMessenger(context, "Deleted");
+                  },
+                  child: IncompleteTodoWidget(
+                    isComplete: true,
+                    todo: completeTodoIndex,
+                    onCheckBoxChnge: () => _markAsUnone(completeTodoIndex),
+                  ),
                 );
               },
             ),
