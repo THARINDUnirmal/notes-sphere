@@ -52,7 +52,6 @@ class TodoService {
   }
 
   //marck as done
-
   Future<void> updateTodo(TodoModel todoIndex) async {
     try {
       final dynamic allTodos = await _todoBox.get("todos");
@@ -61,6 +60,17 @@ class TodoService {
       );
       allTodos[index] = todoIndex;
       await _todoBox.put("todos", allTodos);
+    } catch (e) {
+      print(e.toString());
+    }
+  }
+
+  //todo save methord
+  Future<void> addTodo(TodoModel newTodo) async {
+    try {
+      final dynamic alltodos = await _todoBox.get("todos");
+      alltodos.add(newTodo);
+      await _todoBox.put("todos", alltodos);
     } catch (e) {
       print(e.toString());
     }
