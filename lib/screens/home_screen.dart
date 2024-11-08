@@ -5,7 +5,9 @@ import 'package:notes_sphere/services/note_service.dart';
 import 'package:notes_sphere/services/todo_service.dart';
 import 'package:notes_sphere/utils/app_constants.dart';
 import 'package:notes_sphere/utils/app_text_styles.dart';
+import 'package:notes_sphere/utils/colors.dart';
 import 'package:notes_sphere/utils/routers/app_routers.dart';
+import 'package:notes_sphere/widgets/home_todo_widget.dart';
 import 'package:notes_sphere/widgets/notes_todos_card.dart';
 import 'package:notes_sphere/widgets/progress_card.dart';
 
@@ -127,20 +129,59 @@ class _HomeScreenState extends State<HomeScreen> {
             const SizedBox(
               height: 30,
             ),
-            // SizedBox(
-            //   height: MediaQuery.of(context).size.height * 0.35,
-            //   width: double.infinity,
-            //   child: ListView.builder(
-            //     physics: const ScrollPhysics(),
-            //     shrinkWrap: true,
-            //     itemCount: allTodos.length,
-            //     itemBuilder: (context, index) {
-            //       return IncompleteTodoWidget(
-            //         todo: allTodos[index],
-            //       );
-            //     },
-            //   ),
-            // ),
+            allTodos.isEmpty
+                ? Column(
+                    children: [
+                      SizedBox(
+                        height: MediaQuery.of(context).size.height * 0.1,
+                      ),
+                      GestureDetector(
+                        onTap: () {
+                          AppRouters.appRoute.go("/ToDoScreen");
+                        },
+                        child: Container(
+                          padding: EdgeInsets.all(10),
+                          height: 50,
+                          width: 250,
+                          decoration: BoxDecoration(
+                            borderRadius: BorderRadius.circular(100),
+                            color: AppColor.kCardColor,
+                            border: Border.all(
+                              color: AppColor.kWhiteColor,
+                              width: 1,
+                            ),
+                          ),
+                          child: Center(
+                            child: Text(
+                              "Add some task >>>",
+                              style: AppTextStyles.appLaegeDescription.copyWith(
+                                fontSize: 22,
+                              ),
+                              textAlign: TextAlign.center,
+                            ),
+                          ),
+                        ),
+                      ),
+                    ],
+                  )
+                : SizedBox(
+                    height: MediaQuery.of(context).size.height * 0.35,
+                    width: double.infinity,
+                    child: ListView.builder(
+                      physics: const ScrollPhysics(),
+                      shrinkWrap: true,
+                      itemCount: allTodos.length,
+                      itemBuilder: (context, index) {
+                        final TodoModel newTodo = allTodos[index];
+                        return HomeTodoWidget(
+                          title: newTodo.title,
+                          date: newTodo.date.toString(),
+                          time: newTodo.time.toString(),
+                          isComplete: newTodo.isComplete,
+                        );
+                      },
+                    ),
+                  ),
           ],
         ),
       ),

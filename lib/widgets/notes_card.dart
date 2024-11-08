@@ -38,6 +38,7 @@ class NotesCard extends StatelessWidget {
         crossAxisAlignment: CrossAxisAlignment.start,
         children: [
           Text(
+            maxLines: 1,
             cardTiltle,
             style: AppTextStyles.appSubTitle.copyWith(
               fontWeight: FontWeight.w600,

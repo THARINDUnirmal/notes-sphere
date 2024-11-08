@@ -31,12 +31,17 @@ class _IncompleteTodoWidgetState extends State<IncompleteTodoWidget> {
         color: AppColor.kCardColor,
       ),
       child: ListTile(
+        minVerticalPadding: 10,
         title: Text(
+          maxLines: 2,
           widget.todo.title,
           style: AppTextStyles.appLaegeDescription,
         ),
         subtitle: Row(
           children: [
+            const SizedBox(
+              height: 5,
+            ),
             Text(
                 "${widget.todo.date.day}/${widget.todo.date.month}/${widget.todo.date.year}"),
             const SizedBox(
