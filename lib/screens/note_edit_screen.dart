@@ -219,7 +219,7 @@ class _NoteEditScreenState extends State<NoteEditScreen> {
                               }
 
                               //navigate
-                              AppRouters.appRoute.push("/Notes");
+                              AppRouters.appRoute.go("/Notes");
                             } catch (e) {
                               print(e.toString());
 

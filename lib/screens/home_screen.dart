@@ -64,6 +64,39 @@ class _HomeScreenState extends State<HomeScreen> {
           "Notes Sphere",
           style: AppTextStyles.appTitle,
         ),
+        actions: [
+          InkWell(
+            onTap: () {
+              AppRouters.appRoute.push("/LogIn");
+            },
+            child: Container(
+              width: 90,
+              height: 40,
+              decoration: BoxDecoration(
+                borderRadius: BorderRadius.circular(100),
+                gradient: const LinearGradient(
+                  colors: [
+                    Colors.amber,
+                    Colors.red,
+                  ],
+                  begin: Alignment.topLeft,
+                  end: Alignment.bottomRight,
+                ),
+              ),
+              child: Center(
+                child: Text(
+                  "+ Join",
+                  style: AppTextStyles.appLaegeDescription.copyWith(
+                    fontWeight: FontWeight.w700,
+                  ),
+                ),
+              ),
+            ),
+          ),
+          const SizedBox(
+            width: 10,
+          ),
+        ],
       ),
       body: Padding(
         padding: const EdgeInsets.all(
@@ -140,7 +173,7 @@ class _HomeScreenState extends State<HomeScreen> {
                           AppRouters.appRoute.go("/ToDoScreen");
                         },
                         child: Container(
-                          padding: EdgeInsets.all(10),
+                          padding: const EdgeInsets.all(10),
                           height: 50,
                           width: 250,
                           decoration: BoxDecoration(
