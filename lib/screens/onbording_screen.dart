@@ -34,11 +34,25 @@ class _OnbordingScreenState extends State<OnbordingScreen> {
                 top: 160,
                 left: 185,
                 child: Column(
+                  crossAxisAlignment: CrossAxisAlignment.start,
                   children: [
                     Text(
                       "You can join \nwith us !",
                       style: AppTextStyles.appTitle.copyWith(
                         color: Colors.black,
+                        fontFamily: "Inter",
+                      ),
+                      textAlign: TextAlign.start,
+                    ),
+                    const SizedBox(
+                      height: 10,
+                    ),
+                    Text(
+                      maxLines: 1,
+                      "( Developer : Tharindu Nirmal )",
+                      style: AppTextStyles.appTitle.copyWith(
+                        color: Colors.black,
+                        fontSize: 14,
                         fontFamily: "Inter",
                       ),
                       textAlign: TextAlign.start,
@@ -144,18 +158,6 @@ class _OnbordingScreenState extends State<OnbordingScreen> {
                             )
                           ],
                         ),
-                        SizedBox(
-                          height: MediaQuery.of(context).size.height * 0.075,
-                        ),
-                        Row(
-                          mainAxisAlignment: MainAxisAlignment.center,
-                          children: [
-                            Text(
-                              "Version - 1 . 117 v",
-                              style: AppTextStyles.appSmallDescription,
-                            ),
-                          ],
-                        )
                       ],
                     ),
                   ),
