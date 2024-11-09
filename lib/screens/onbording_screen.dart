@@ -23,16 +23,16 @@ class _OnbordingScreenState extends State<OnbordingScreen> {
             children: [
               Positioned(
                 width: MediaQuery.of(context).size.width * 1.5,
-                right: -10,
-                bottom: 130,
+                right: MediaQuery.of(context).size.height * -0.03,
+                bottom: MediaQuery.of(context).size.height * 0.165,
                 child: Image.asset(
                   "assets/user.png",
                   fit: BoxFit.cover,
                 ),
               ),
               Positioned(
-                top: 160,
-                left: 185,
+                top: MediaQuery.of(context).size.height * 0.16,
+                left: MediaQuery.of(context).size.height * 0.22,
                 child: Column(
                   crossAxisAlignment: CrossAxisAlignment.start,
                   children: [
@@ -94,8 +94,8 @@ class _OnbordingScreenState extends State<OnbordingScreen> {
                             fontFamily: "Inter",
                           ),
                         ),
-                        const SizedBox(
-                          height: 50,
+                        SizedBox(
+                          height: MediaQuery.of(context).size.height * 0.07,
                         ),
                         Row(
                           mainAxisAlignment: MainAxisAlignment.center,
