@@ -2,7 +2,7 @@ import 'package:flutter/material.dart';
 
 import 'package:notes_sphere/utils/app_text_styles.dart';
 import 'package:notes_sphere/utils/colors.dart';
-import 'package:url_launcher/url_launcher.dart';
+import 'package:url_launcher/url_launcher.dart' as launcher;
 
 class OnbordingScreen extends StatefulWidget {
   const OnbordingScreen({super.key});
@@ -88,11 +88,11 @@ class _OnbordingScreenState extends State<OnbordingScreen> {
                           children: [
                             GestureDetector(
                               onTap: () {
-                                launchUrl(
-                                  Uri.https(
-                                    "https://github.com/THARINDUnirmal",
-                                  ),
-                                );
+                                launcher.launchUrl(
+                                    Uri.parse(
+                                        'https://github.com/THARINDUnirmal'),
+                                    mode: launcher
+                                        .LaunchMode.externalApplication);
                               },
                               child: Container(
                                 width: MediaQuery.of(context).size.width * 0.53,
@@ -131,7 +131,7 @@ class _OnbordingScreenState extends State<OnbordingScreen> {
                             ),
                             IconButton(
                               onPressed: () {
-                                launchUrl(
+                                launcher.launchUrl(
                                   Uri.parse(
                                       "mailto:tharindunirmal1111@gmail.com?subject=Hi&body=Hello"),
                                 );
